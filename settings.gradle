@@ -1,0 +1,5 @@
+rootProject.name = 'large'
+include 'common'
+include 'client'
+include 'webapp'
+

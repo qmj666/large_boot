@@ -1,0 +1,19 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization.write_dates_as_timestamps: false
+    default-property-inclusion: non_null
+  application:
+    name: large
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2048MB
+      max-request-size: 2048MB
+

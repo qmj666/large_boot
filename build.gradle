@@ -1,0 +1,122 @@
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+
+// gradle自身会用到的相关设置
+buildscript {
+    // 仓库
+    repositories {
+//         本地
+        mavenLocal()
+
+//         阿里云
+        maven {
+            url 'https://maven.aliyun.com/nexus/content/groups/public/'
+        }
+//         中央仓库
+        mavenCentral()
+//         grandle插件
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    // 子模块会用到的变量
+    ext {
+        springBootVersion = '2.6.3'
+    }
+}
+
+// 插件
+plugins {
+    id 'java'
+    id 'java-library'
+    // 有这个声明，子模块可以使用org.springframework.boot插件而无需指定版本，但是apply=false表示当前模块不使用此插件
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+// gradle wrapper指定版本
+wrapper {
+    gradleVersion = '7.4.2'
+}
+
+// 取当前时间
+def buildTimeAndDate = OffsetDateTime.now()
+
+// 根据时间生成字符串变量
+ext {
+    projectVersion = project.version
+    buildDate = DateTimeFormatter.ISO_LOCAL_DATE.format(buildTimeAndDate)
+    buildTime = DateTimeFormatter.ofPattern('HH:mm:ss.SSSS').format(buildTimeAndDate)
+}
+
+// 针对所有project的配置，包含根项目
+allprojects {
+    group 'com.large'
+    version '1.0.0'
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'war'
+    apply plugin: 'io.spring.dependency-management'
+
+    // 编译相关参数
+    compileJava {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+        options.encoding = 'UTF-8'
+        options.compilerArgs = [
+                '-Xlint:all', '-Xlint:-processing'
+        ]
+    }
+
+    // Copy LICENSE
+    tasks.withType(Jar) {
+        from(project.rootDir) {
+            include 'LICENSE'
+            into 'META-INF'
+        }
+    }
+
+    // 仓库
+    repositories {
+        // 本地
+        mavenLocal()
+
+//        // 如果有私服就在此配置，如果没有请删除这个配置
+//        maven {
+//            url 'https://maven.aliyun.com/repository/public'
+//        }
+
+//        // 如果要访问私服的snapshot库，就在此配置地址
+//        // 如果没有请删除这个配置
+//        maven {
+//            url 'http://192.168.0.10:9000/repository/my-snapshot/'
+//        }
+// 中央仓库
+        mavenCentral()
+// grandle插件
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+// 类似maven的dependencyManagement，这里将所有jar的版本指定好，子模块在依赖时可以不用指定版本
+allprojects { project ->
+    buildscript {
+        dependencyManagement {
+            imports {
+                mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+            }
+
+            dependencies {
+                dependency 'org.projectlombok:lombok:1.18.20'
+            }
+        }
+    }
+
+}
+
+
+

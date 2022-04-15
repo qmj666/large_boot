@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+
+    // 二方库依赖
+    implementation project(':common')
+    implementation project(':client')
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+}
