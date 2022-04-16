@@ -78,6 +78,25 @@ allprojects {
         }
     }
 
+    // 生成jar文件时，MANIFEST.MF的内容如下
+    jar {
+        manifest {
+            attributes(
+                    'Created-By': "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString(),
+                    'Built-By': 'qmj',
+                    'Build-Date': buildDate,
+                    'Build-Time': buildTime,
+                    'Built-OS': "${System.properties['os.name']}",
+                    'Specification-Title': project.name,
+                    'Specification-Version': project.version,
+                    'Specification-Vendor': 'large',
+                    'Implementation-Title': project.name,
+                    'Implementation-Version': project.version,
+                    'Implementation-Vendor': 'large'
+            )
+        }
+    }
+
     // 仓库
     repositories {
         // 本地
@@ -85,13 +104,22 @@ allprojects {
 
 //        // 如果有私服就在此配置，如果没有请删除这个配置
 //        maven {
+//            url 'http://192.168.50.43:8081/repository/aliyun-proxy/'
+//        }
+//
+//        maven {
 //            url 'https://maven.aliyun.com/repository/public'
 //        }
-
+//
+//        // 如果要访问私服的release库，就在此配置地址
+//        // 如果没有请删除这个配置
+//        maven {
+//            url 'http://192.168.50.43:8081/repository/my-release/'
+//        }
 //        // 如果要访问私服的snapshot库，就在此配置地址
 //        // 如果没有请删除这个配置
 //        maven {
-//            url 'http://192.168.0.10:9000/repository/my-snapshot/'
+//            url 'http://192.168.50.43:8081/repository/my-snapshot/'
 //        }
 // 中央仓库
         mavenCentral()
@@ -108,15 +136,27 @@ allprojects { project ->
         dependencyManagement {
             imports {
                 mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+
+                mavenBom "org.junit:junit-bom:5.8.2"
             }
 
             dependencies {
-                dependency 'org.projectlombok:lombok:1.18.20'
+                dependency('org.projectlombok:lombok:1.18.20')
+                dependency("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0")
+                dependency("com.baomidou:mybatis-plus-boot-starter:3.4.2")
+                dependency("com.github.pagehelper:pagehelper-spring-boot-starter:1.4.1")
             }
         }
     }
 
 }
 
-
+subprojects {
+    // 省略其它log内容
+    configurations.all {
+        exclude group:'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude module: 'logback-classic'
+        exclude module: 'logback-core'
+    }
+}
 

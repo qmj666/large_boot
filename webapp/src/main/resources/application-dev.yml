@@ -1,3 +1,12 @@
+#配置日志
+logging:
+#  未论证确定yml还是xml配置
+  config: classpath:log4j2.yml
+#  config: classpath:log4j2.xml
+  level:
+    root: info
+    com.large: debug
+
 server:
   #会话超时时间，原则上要略大于redis session生效时间14
   port: 8081
@@ -25,6 +34,187 @@ server:
     # secs
     backgroundProcessorDelay: 30
 
+spring:
+#  quartz定时器
+  quartz:
+    properties:
+      org:
+        quartz:
+          jdbc-store-type: jdbc
+          scheduler:
+            instanceName: clusteredScheduler
+            instanceId: AUTO
+            wrapJobExecutionInUserTransaction: false
+            rmi:
+              export: false
+              proxy: false
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: qrtz_
+            useProperties: false
+            dataSource: qzDS
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+          dataSource:
+            qzDS:
+              driver: com.mysql.cj.jdbc.Driver
+              URL: jdbc:mysql://127.0.0.1:3306/quartzdemo?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
+              user: xlyprint
+              password: xlyXLYprint2016
+#  mysql
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/quartzdemo?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
+    username: xlyprint
+    password: xlyXLYprint2016
+    # druid连接池配置
+    druid:
+      # 连接池的配置信息
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      maxActive: 203
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      #  SELECT 1(mysql), select 1 from dual(oracle), SELECT 1(MS Sql Server) 。
+      validationQuery: SELECT 1
+      #建议配置为true，不影响性能，并且保证安全性。 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis， 执行validationQuery检测连接是否有效。
+      testWhileIdle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。设置为false
+      testOnBorrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能,设置为flase
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      # 池中能够缓冲的preparedStatements语句数量
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙, 监控统计用的stat, 日志用log4j, 防御sql注入:wall
+      filters: stat,wall,slf4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 配置DruidStatFilter
+      web-stat-filter:
+        enabled: true
+        # 添加过滤规则.
+        url-pattern: "/*"
+        # 添加不需要忽略的格式信息.
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      # 配置DruidStatViewServlet
+      stat-view-servlet:
+        # IP白名单(没有配置或者为空，则允许所有访问)
+        allow: 127.0.0.1
+        # IP黑名单 (存在共同时，deny优先于allow)
+        deny: 192.168.1.73
+        # 禁用HTML页面上的“Reset All”功能
+        reset-enable: false
+        # druid登录的账户名
+        login-username: admin
+        # druid登录的密码
+        login-password: 123456
+
+        # 不要写2个*号！要1个！
+        url-pattern: "/druid/*"
+        #这里配true才能访问监控页面！
+        enabled: true
+#      initialSize: 5 #初始化时池中建立的物理连接个数。
+#      minIdle: 5
+#      maxActive: 20 #最大的可活跃的连接池数量
+#      maxWait: 60000  #获取连接时最大等待时间，单位毫秒，超过连接就会失效。配置了maxWait之后，缺省启用公平锁，并发效率会有所下降， 如果需要可以通过配置useUnfairLock属性为true使用非公平锁。
+#      timeBetweenEvictionRunsMillis: 60000 #连接回收器的运行周期时间，时间到了清理池中空闲的连接，testWhileIdle根据这个判断
+#      minEvictableIdleTimeMillis: 300000
+#      validationQuery: SELECT 1 #用来检测连接是否有效的sql，要求是一个查询语句。 SELECT 1(mysql), select 1 from dual(oracle), SELECT 1(MS Sql Server) 。
+#      testWhileIdle: true #建议配置为true，不影响性能，并且保证安全性。 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis， 执行validationQuery检测连接是否有效。
+#      testOnBorrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。设置为false
+#      testOnReturn: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能,设置为flase
+#      poolPreparedStatements: true #是否缓存preparedStatement，也就是PSCache。
+#      maxPoolPreparedStatementPerConnectionSize: 200 #池中能够缓冲的preparedStatements语句数量
+#      filters: stat #属性类型的字符串，通过别名的方式配置扩展插件， 监控统计用的stat 日志用log4j 防御sql注入:wall
+
+#    tomcat连接池配置
+#    tomcat:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://127.0.0.1:3306/quartzdemo?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
+#      username: xlyprint
+#      password: xlyXLYprint2016
+##该选项用来验证数据库连接的有效性。
+##SELECT 1(mysql), select 1 from dual(oracle), SELECT 1(MS Sql Server) 。
+#      validation-query: SELECT 1
+#      #连接池的最大数据库连接数。设为0表示无限制。
+#      max-active: 100
+#      #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+#      max-wait: 10000
+#      #最大空闲数，数据库连接的最大空闲时间。默认100
+#      #超过空闲时间，数据库连接将被标记为不可用，然后被释放。设为0表示无限制。
+#      max-idle: 100
+#      min-idle: 10
+#      jmx-enabled: true
+#      test-on-borrow: false
+#      test-while-idle: true
+#      test-on-return: false
+#      validation-interval: 30000
+#      time-between-eviction-runs-millis: 60000
+#      initial-size: 10
+#      remove-abandoned-timeout: 1800
+#      log-abandoned: true
+#      remove-abandoned: true
+#      jdbc-interceptors: org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
+#      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#      minEvictableIdleTimeMillis: 300000
+
+#  redis
+  redis:
+    #单实例连接打开此配置,关闭cluster配置即可
+    host: 127.0.0.1
+    port: 16379
+#    cluster:
+#      nodes: 127.0.0.1:6379,127.0.0.2:6379,127.0.0.3:6379,127.0.0.4:6379,127.0.0.5:6379,127.0.0.6:6379
+#      max-redirects: 3
+    password: xlyXLY2015
+    timeout: 50000
+    ssl: false
+    database: 3
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 8
+        min-idle: 1
+        max-wait: 5000
+        time-between-eviction-runs: 1000 # 配置空闲连接回收间隔时间,min-idle才会生效,否则不生效
+#      cluster:
+#        refresh: #拓扑刷新开关
+#          adaptive: true #自适应刷新集群 默认false关闭
+#          period: 30000 #定时刷新集群
+    client-name: AppName #配置客户端名称
+
+#
+#  data:
+#    #mongo服务器相关配置
+#    mongodb:
+#      uri: mongodb://xlyerp:xlyerp@t0.xlyprint.com:27017/xlywebdb
+#      auto-index-creation: false
+#
+#  #activemq相关配置
+#  activemq:
+#    user: dike
+#    broker-url: tcp://t0.xlyprint.com:61616
+#    in-memory: true
+#    password: futurepk4dike
+#    packages:
+#      trust-all: true
+#    pool:
+#      enabled: false
+#      #      expiry-timeout: 0
+#      idle-timeout: 3000
+#      max-connections: 10
 
 
 

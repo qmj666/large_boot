@@ -4,11 +4,20 @@ plugins {
 
 // 子模块自己的依赖
 dependencies {
-
     // 使用api，将依赖传递给使用democlient的模块
     api 'org.projectlombok:lombok'
-
     // annotationProcessor不会传递，使用了lombok生成代码的模块，需要自己声明annotationProcessor
     annotationProcessor 'org.projectlombok:lombok'
+
+    api 'org.springframework.boot:spring-boot-starter-log4j2'
+//    annotationProcessor 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    api 'com.baomidou:mybatis-plus-boot-starter'
+//    annotationProcessor 'com.baomidou:mybatis-plus-boot-starter'
+    api 'org.mybatis.spring.boot:mybatis-spring-boot-starter'
+//    annotationProcessor 'org.mybatis.spring.boot:mybatis-spring-boot-starter'
+
+    api 'com.github.pagehelper:pagehelper-spring-boot-starter'
+//    annotationProcessor 'com.github.pagehelper:pagehelper-spring-boot-starter'
 
 }

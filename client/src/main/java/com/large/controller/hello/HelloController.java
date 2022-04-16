@@ -1,4 +1,4 @@
-package com.large.hello;
+package com.large.controller.hello;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

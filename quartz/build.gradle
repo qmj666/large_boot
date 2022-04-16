@@ -4,8 +4,9 @@ plugins {
 
 // 子模块自己的依赖
 dependencies {
-
     implementation project(':common')
     annotationProcessor 'org.projectlombok:lombok'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
 }
