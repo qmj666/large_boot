@@ -62,14 +62,14 @@ spring:
           dataSource:
             qzDS:
               driver: com.mysql.cj.jdbc.Driver
-              URL: jdbc:mysql://127.0.0.1:3306/quartzdemo?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
+              URL: jdbc:mysql://127.0.0.1:3306/large?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
               user: xlyprint
               password: xlyXLYprint2016
 #  mysql
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/quartzdemo?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/large?allowMultiQueries=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=UTC
     username: xlyprint
     password: xlyXLYprint2016
     # druid连接池配置

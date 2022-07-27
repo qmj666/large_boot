@@ -10,6 +10,16 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     api 'org.springframework.boot:spring-boot-starter-log4j2'
+    api 'org.springframework.boot:spring-boot-starter-validation'
+    api 'org.springframework.boot:spring-boot-starter-web'
+    implementation group: 'org.apache.shiro', name: 'shiro-core', version: '1.9.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.15'
+    implementation 'com.alibaba:druid-spring-boot-starter:1.2.8'
+
+
 //    annotationProcessor 'org.springframework.boot:spring-boot-starter-log4j2'
 
     api 'com.baomidou:mybatis-plus-boot-starter'

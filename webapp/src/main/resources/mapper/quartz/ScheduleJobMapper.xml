@@ -24,7 +24,7 @@
           target_name,
           method_name
         from
-          schedule_job
+          schedulejob
         <where>
             <if test="id != null" >
                id = #{id}

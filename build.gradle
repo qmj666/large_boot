@@ -22,7 +22,7 @@ buildscript {
 
     // 子模块会用到的变量
     ext {
-        springBootVersion = '2.6.3'
+        springBootVersion = '2.6.6'
     }
 }
 

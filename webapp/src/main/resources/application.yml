@@ -32,6 +32,7 @@ mybatis-plus:
       tableUnderline: true
       logic-delete-value: 1
       logic-not-delete-value: 0
+    banner: false
   configuration:
     map-underscore-to-camel-case: true
     call-setters-on-nulls: false
@@ -48,6 +49,7 @@ mybatis-plus:
     local-cache-scope: session
     jdbc-type-for-null: 'null'
 
+
 pagehelper:
     helperDialect: mysql
     reasonable: true
@@ -55,7 +57,11 @@ pagehelper:
     supportMethodsArguments: true
     params: count=countSql
 
-
+renren:
+  redis:
+    open: false
+  shiro:
+    redis: false
 
 #  热部署，自动重启
 #  devtools:

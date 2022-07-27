@@ -1,6 +1,9 @@
 rootProject.name = 'large_boot'
 include 'common'
-include 'client'
+include 'sys'
+
 include 'quartz'
+include 'client'
+
 include 'webapp'
 
